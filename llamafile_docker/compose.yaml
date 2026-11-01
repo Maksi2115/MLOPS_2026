@@ -1,0 +1,21 @@
+services:
+  llamafile:
+    build:
+      context: .
+      args:
+        # WKLEJ TUTAJ SWOJĄ SUMĘ KONTROLNĄ Z KROKU 1:
+        MODEL_CHECKSUM: "29eca81f9f3a639029aa1f35cb1f28a9411aafbc54f12b920ca904177177a965"
+    image: local-llamafile:1.0
+    container_name: llamafile_docker
+    restart: always
+    env_file:
+      - .env
+    ports:
+      # Bindowanie TYLKO do izolowanej sieci Host-Only
+      - "192.168.56.102:${PORT}:${PORT}"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          # Limit RAM ustalony na podstawie zużycia z systemu systemd (ok. 820MB + rezerwa)
+          memory: 1536M
